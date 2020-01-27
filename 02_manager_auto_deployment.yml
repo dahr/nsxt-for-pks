@@ -1,0 +1,39 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - answerfile.yml
+  tasks:
+    - name: Deploy and register a cluster node VM
+      nsxt_controller_manager_auto_deployment:
+          hostname: "{{hostname}}"
+          username: "{{username}}"
+          password: "{{password}}"
+          validate_certs: False
+          deployment_requests:
+          - roles:
+            - CONTROLLER
+            - MANAGER
+            form_factor: "{{item.form_factor}}"
+            user_settings:
+              cli_password: "{{item.password}}"
+              root_password: "{{item.password}}"
+            deployment_config:
+              placement_type: VsphereClusterNodeVMDeploymentConfig
+              vc_name: "{{management_vc}}"
+              management_network_id: "{{item.mgmt_network_id}}"
+              hostname: "{{item.hostname}}"
+              compute_id: "{{item.compute_id}}"
+              storage_id: "{{item.storage_id}}"
+              default_gateway_addresses: "{{item.default_gateways}}"
+              management_port_subnets:
+              - ip_addresses: "{{item.mgmt_ip_addresses}}"
+                prefix_length: "{{item.prefix_length}}"
+              dns_servers: "{{item.dns_servers}}"
+          node_id: 6c864e32-48e0-44df-8364-ab03bdcbdeef
+          state: absent
+      with_items:
+        - "{{manager_deployment}}"

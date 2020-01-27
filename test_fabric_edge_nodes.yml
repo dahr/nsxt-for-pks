@@ -1,0 +1,41 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - answerfile.yml
+  tasks:
+    - name: Add Edge VM
+      nsxt_fabric_nodes:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        resource_type: "EdgeNode"
+        display_name: "EdegeNode1"
+        #node_id: "58c42d2c-d9bb-4d88-9d9c-3d032ad455e2"
+        ip_addresses:
+        deployment_config:
+          form_factor: "SMALL"
+          node_user_settings:
+            cli_password: "VMware1!VMware1!"
+            root_password: "VMware1!VMware1!"
+          vm_deployment_config:
+            placement_type: VsphereDeploymentConfig
+            vc_name: "vcsa-01a"
+            data_network_ids:
+            - dvportgroup-152
+            - dvportgroup-151
+            management_network_id: "dvportgroup-153"
+            hostname: "EdgeVM1"
+            compute_id: "domain-c141"
+            storage_id: "datastore-155"
+            default_gateway_addresses:
+            - 192.168.110.1
+            management_port_subnets:
+            - ip_addresses:
+              - 192.168.110.16
+              prefix_length: "24"
+        state: absent
