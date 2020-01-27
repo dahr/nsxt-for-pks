@@ -2,7 +2,7 @@
 
 # Overview
 This repository contains NSX-T Ansible Modules, which one can use with
-Ansible to work with [VMware NSX-T Data Center][vmware-nsxt].
+Ansible to work with [VMware NSX-T Data Center][vmware-nsxt] and configure for Enterprise PKS.
 
 [vmware-nsxt]: https://www.vmware.com/products/nsx.html
 
@@ -18,9 +18,8 @@ Documentation on the NSX platform can be found at the [NSX-T Documentation page]
 The modules in this repository are focused on enabling automation of installation workflows of NSX-T.
 
 ### Branch Information
-This repository has different branches with each branch providing support for upto a specific NSX-T release. Below is the list:
-* v1.1.0: NSX-T 2.4
-* v1.0.0: NSX-T 2.3
+This repository has a specific NSX-T release. Below is the list:
+* v1.1.0: NSX-T 2.5.1
 
 #### Deployment and installation modules
 
