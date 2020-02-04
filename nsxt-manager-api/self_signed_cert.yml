@@ -7,22 +7,24 @@
   vars_files:
     - answerfile.yml
   tasks:
-  - name: Generate a Self Signed OpenSSL certificate
+  - name: Generate private key
     openssl_privatekey:
-      path: /home/vmware/test.pem
+      path: /home/vmware/certs/test.pem
       size: 2048
-    # openssl_csr:
-    #   common_name:
-    #   country_name:
-    #   email_address:
-    #   organization_name:
-    #   state_or_province_name:
-    #   subject: 
-    #   subject_alt_name:
-    #   path: /etc/stunnel/redis-server.csr
-    #   privatekey_path: /etc/stunnel/redis-server.key
-    # openssl_certificate:
-    #   path: ./ansible.com.crt
-    #   privatekey_path: ./ansible.com.pem
-    #   csr_path: ./ansible.com.csr
-    #   provider: selfsigned
+  - name: Generate CSR
+    openssl_csr:
+      common_name: 192.168.110.42
+      country_name: US
+      email_address: dahr@vmware.com
+      organization_name: NSX
+      state_or_province_name: Texas
+      locality_name: TX
+      subject_alt_name: 'DNS:192.168.110.10'
+      path: /home/vmware/certs/test.csr
+      privatekey_path: /home/vmware/certs/test.pem
+  - name: Generate cert
+    openssl_certificate:
+      path: /home/vmware/certs/test.crt
+      privatekey_path: /home/vmware/certs/test.pem
+      csr_path: /home/vmware/certs/test.csr
+      provider: selfsigned
