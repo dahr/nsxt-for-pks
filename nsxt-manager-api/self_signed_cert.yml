@@ -11,6 +11,7 @@
     openssl_privatekey:
       path: /home/vmware/certs/test.pem
       size: 2048
+      state: present
   - name: Generate CSR
     openssl_csr:
       common_name: 192.168.110.42
@@ -22,9 +23,11 @@
       subject_alt_name: 'DNS:192.168.110.10'
       path: /home/vmware/certs/test.csr
       privatekey_path: /home/vmware/certs/test.pem
+      state: present
   - name: Generate cert
     openssl_certificate:
       path: /home/vmware/certs/test.crt
       privatekey_path: /home/vmware/certs/test.pem
       csr_path: /home/vmware/certs/test.csr
       provider: selfsigned
+      state: present

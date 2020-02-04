@@ -1,0 +1,17 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - answerfile.yml
+  tasks:
+    - name: Manager cluster cert update
+      nsxt_manager_node_cert:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        certificate_id: "7abc8483-bb20-41c9-bf1a-c55406433432"
+        state: "present"
