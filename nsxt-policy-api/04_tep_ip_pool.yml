@@ -1,0 +1,33 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  #vars_files:
+  #  - answerfile.yml
+  tasks:
+    - name: Create ip pool
+      nsxt_ip_pools:
+        resource_type: "Infra"
+        hostname: "nsxmgr-01a.corp.local"
+        username: "admin"
+        password: "VMware1!VMware1!"
+        display_name: "test-tep"
+        validate_certs: False
+        children:
+        - resource_type: "ChildIpAddressPool"
+          IpAddressPool:
+            resource_type: "IpAddressPool"
+            children:
+            - resource_type: "ChildIpAddressPoolSubnet"
+              IpAddressPoolSubnet:
+                resource_type: "IpAddressPoolStaticSubnet"
+                gateway_ip: "192.169.100.1"
+                cidr: "192.169.100.0/24"
+                allocation_ranges:
+                - start: "192.169.100.51"
+                  end: "192.169.100.99"
+        state: present
+      #with_items:
+      #  - "{{tep_ip_pool}}"

@@ -33,7 +33,7 @@
               - ip_addresses: "{{item.mgmt_ip_addresses}}"
                 prefix_length: "{{item.prefix_length}}"
               dns_servers: "{{item.dns_servers}}"
-          node_id: 6c864e32-48e0-44df-8364-ab03bdcbdeef
+          node_id:
           state: absent
       with_items:
         - "{{manager_deployment}}"

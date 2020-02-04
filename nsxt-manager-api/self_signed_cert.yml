@@ -1,0 +1,28 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - answerfile.yml
+  tasks:
+  - name: Generate a Self Signed OpenSSL certificate
+    openssl_privatekey:
+      path: /home/vmware/test.pem
+      size: 2048
+    # openssl_csr:
+    #   common_name:
+    #   country_name:
+    #   email_address:
+    #   organization_name:
+    #   state_or_province_name:
+    #   subject: 
+    #   subject_alt_name:
+    #   path: /etc/stunnel/redis-server.csr
+    #   privatekey_path: /etc/stunnel/redis-server.key
+    # openssl_certificate:
+    #   path: ./ansible.com.crt
+    #   privatekey_path: ./ansible.com.pem
+    #   csr_path: ./ansible.com.csr
+    #   provider: selfsigned

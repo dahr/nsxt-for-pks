@@ -1,0 +1,176 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+hostname: "nsxmgr-01a.corp.local"
+username: "admin"
+password: "VMware1!VMware1!"
+validate_certs: False
+management_vc: "vcsa-01a"
+compute_vc: "vcsa-01a"
+
+compute_managers:
+- display_name: "vcsa-01a"
+  server: "vcsa-01a.corp.local"
+  origin_type: vCenter
+  credential_type: UsernamePasswordLoginCredential
+  username: "administrator@corp.local"
+  password: "VMware1!"
+  thumbprint: "0D:B6:E1:3C:6F:9C:F6:B3:27:C9:DC:62:68:FE:3B:DF:42:59:C6:19:A4:99:51:D9:FD:39:72:3F:6E:43:BA:C6"
+
+manager_deployment:
+  form_factor: "SMALL"
+  password: "VMware1!VMware1!"
+  mgmt_network_id: "dvportgroup-153"
+  compute_id: "domain-c141"
+  hostname: "nsxmgr-02a"
+  storage_id: "datastore-155"
+  default_gateways: 
+  - 192.168.110.1
+  mgmt_ip_addresses: 
+  - 192.168.110.16
+  prefix_length: "24"
+  dns_servers:
+  - 192.168.110.10
+
+transportzoneoverlay:
+- display_name: "tz_overlay"
+  transport_type: "OVERLAY"
+  host_switch_name: "tz_overlay"
+
+transportzonevlan:
+- display_name: "tz_uplink"
+  transport_type: "VLAN"
+  host_switch_name: "tz_uplink"
+
+compute_uplink_profile:
+- display_name: nsx-compute-uplink-profile
+  teaming:
+    active_list:
+    - uplink_name: "uplink-1"
+      uplink_type: PNIC
+    - uplink_name: "uplink-2"
+      uplink_type: PNIC
+    policy: LOADBALANCE_SRCID
+  transport_vlan: 0
+
+edge_uplink1_profile:
+- display_name: nsx-edge-uplink1-profile
+  teaming:
+    active_list:
+    - uplink_name: "uplink-1"
+      uplink_type: PNIC
+    policy: FAILOVER_ORDER
+  transport_vlan: 0
+
+edge_uplink2_profile:
+- display_name: nsx-edge-uplink2-profile
+  teaming:
+    active_list:
+    - uplink_name: "uplink-1"
+      uplink_type: PNIC
+    policy: FAILOVER_ORDER
+  transport_vlan: 0
+
+tep_ip_pool:
+- display_name: "tep_ip_pool"
+  subnets:
+  - dns_nameservers:
+    - 192.168.110.10
+    allocation_ranges:
+    - start: 192.168.120.5
+      end: 192.168.120.20
+    gateway_ip: 192.168.120.1
+    cidr: "192.168.120.0/24"
+
+edge_transport_nodes:
+- display_name: nsxedge-1
+  host_switches:
+  - host_switch_profiles:
+    - name: nsx-edge-single-nic-uplink-profile
+      type: UplinkHostSwitchProfile
+    host_switch_name: tz_uplink
+    pnics:
+    - device_name: "fp-eth0"
+      uplink_name: "uplink-1"
+  - host_switch_profiles:
+    - name: nsx-edge-single-nic-uplink-profile
+      type: UplinkHostSwitchProfile
+    host_switch_name: tz_overlay
+    pnics:
+    - device_name: "fp-eth1"
+      uplink_name: "uplink-1"
+    ip_assignment_spec:
+      resource_type: StaticIpPoolSpec
+      ip_pool_name: "tep_ip_pool"
+  transport_zone_endpoints:
+  - transport_zone_name: "tz_uplink"
+  - transport_zone_name: "tz_overlay"
+
+host_transport_nodes:
+- display_name: esx-01a.corp.local
+  host_switches:
+  - host_switch_profiles:
+    - name: nsx-edge-single-nic-uplink-profile
+      type: UplinkHostSwitchProfile
+    host_switch_name: tz_overlay
+    pnics:
+    - device_name: "vmnic1"
+      uplink_name: "uplink-1"
+    ip_assignment_spec:
+      resource_type: StaticIpPoolSpec
+      ip_pool_name: "tep_ip_pool"
+  transport_zone_endpoints:
+  - transport_zone_name: "tz_overlay"
+  node_deployment_info:
+    resource_type: "HostNode"
+    display_name: "Host_1"
+    ip_addresses: ["192.168.110.51"]
+    os_type: "ESXI"
+    os_version: "6.7.0"
+    host_credential:
+      username: "root"
+      password: "VMware1!"
+      thumbprint: "97:4F:42:3F:4C:2C:DB:6B:41:1C:0C:03:E8:35:41:CD:27:91:BB:01:B7:9F:5A:3E:B0:3B:85:94:FA:17:22:64"
+
+# - display_name: TN2
+#   host_switches:
+#   - host_switch_profiles:
+#     - name: uplinkProfile2
+#       type: UplinkHostSwitchProfile
+#     host_switch_name: hostswitch2
+#     pnics:
+#     - device_name: vmnic1
+#       uplink_name: "uplink-2"
+#     ip_assignment_spec:
+#       resource_type: StaticIpPoolSpec
+#       ip_pool_name: "IPPool-IPV4-1"
+#   transport_zone_endpoints:
+#   - transport_zone_name: "TZ2"
+#   fabric_node_name: "Host_2"
+
+
+transport_node_profiles:
+- display_name: TNP1
+  host_switches:
+  - host_switch_profiles:
+    - name: uplinkProfile1
+      type: UplinkHostSwitchProfile
+    host_switch_name: hostswitch1
+    pnics:
+    - device_name: vmnic1
+      uplink_name: "uplink-1"
+    ip_assignment_spec:
+      resource_type: StaticIpPoolSpec
+      ip_pool_name: "IPPool-IPV4-1"
+  transport_zone_endpoints:
+  - transport_zone_name: "TZ1"
+
+route_advertise:
+  display_name: "tier-1" # Must be a tier 1 router name
+  enabled: True
+  advertise_dns_forwarder: False
+  advertise_lb_snat_ip: True
+  advertise_lb_vip: True
+  advertise_nat_routes: True
+  advertise_nsx_connected_routes: True
+  advertise_static_routes: True

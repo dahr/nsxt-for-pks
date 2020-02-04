@@ -1,0 +1,57 @@
+resource_type: Infra
+children:
+- resource_type: ChildTier0
+  marked_for_delete: 'false'
+  Tier0:
+    resource_type: Tier0
+    id: "{{t0_name_id}}"
+    ha_mode: ACTIVE_STANDBY
+    children:
+    - resource_type: ChildLocaleServices
+      LocaleServices:
+        edge_cluster_path: "/infra/sites/default/enforcement-points/default/edge-clusters/{{edge_cluster_id}}"
+        resource_type: LocaleServices
+        id: "{{t0_name_id}}-SR"
+        children:
+        - Tier0Interface:
+            edge_path: "/infra/sites/default/enforcement-points/default/edge-clusters/{{edge_cluster_id}}/edge-nodes/{{edge_cluster_member_1_id}}"
+            segment_path: "/infra/segments/{{t0_uplink_ls_name}}"
+            type: EXTERNAL
+            resource_type: Tier0Interface
+            id: "{{t0_uplink1_name}}"
+            display_name: "{{t0_uplink1_name}}"
+            children: []
+            marked_for_delete: false
+            subnets:
+            - ip_addresses:
+              - "{{t0_uplink1_ip}}"
+              prefix_len: "{{t0_uplinks_subnetmask}}"
+          resource_type: ChildTier0Interface
+          marked_for_delete: false
+        - Tier0Interface:
+            edge_path: "/infra/sites/default/enforcement-points/default/edge-clusters/{{edge_cluster_id}}/edge-nodes/{{edge_cluster_member_2_id}}"
+            segment_path: "/infra/segments/{{t0_uplink_ls_name}}"
+            type: EXTERNAL
+            resource_type: Tier0Interface
+            id: "{{t0_uplink2_name}}"
+            display_name: "{{t0_uplink2_name}}"
+            children: []
+            marked_for_delete: false
+            subnets:
+            - ip_addresses:
+              - "{{t0_uplink2_ip}}"
+              prefix_len: "{{t0_uplinks_subnetmask}}"
+          resource_type: ChildTier0Interface
+          marked_for_delete: false
+    - resource_type: ChildStaticRoutes
+      marked_for_delete: false
+      StaticRoutes:
+        network: 0.0.0.0/0
+        next_hops:
+        - ip_address: "{{t0_uplinks_default_gw}}"
+          admin_distance: 1
+        resource_type: StaticRoutes
+        id: Default
+        display_name: Default
+        children: []
+        marked_for_delete: false

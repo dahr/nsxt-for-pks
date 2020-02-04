@@ -1,0 +1,28 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - answerfile.yml
+  tasks:
+    - name: Create Pods IP address block
+      nsxt_ip_blocks:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        display_name: "pods2-ip-block"
+        state: absent
+        cidr: "172.29.0.0/24"
+
+    - name: Create Nodes IP address block
+      nsxt_ip_blocks:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        display_name: "nodes2-ip-block"
+        state: absent
+        cidr: "172.28.0.0/24"
