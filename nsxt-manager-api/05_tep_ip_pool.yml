@@ -9,12 +9,13 @@
   tasks:
     - name: Create ip pool
       nsxt_ip_pools:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
         display_name: "{{item.display_name}}"
         subnets: "{{item.subnets}}"
         state: "{{state}}"
+        dns_suffix: "{{dns_suffix}}"
       with_items:
         - "{{tep_ip_pool}}"

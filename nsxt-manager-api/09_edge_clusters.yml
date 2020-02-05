@@ -9,7 +9,7 @@
   tasks:
     - name: Add edge cluster
       nsxt_edge_clusters:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False

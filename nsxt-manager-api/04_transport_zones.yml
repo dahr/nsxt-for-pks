@@ -25,7 +25,7 @@
 
     - name: Create VLAN Transport Zone
       nsxt_transport_zones:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False

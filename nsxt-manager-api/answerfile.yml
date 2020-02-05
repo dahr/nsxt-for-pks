@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
 ---
 hostname: "nsxmgr-01a.corp.local"
+manager_cluster_vip: ""
 username: "admin"
 password: "VMware1!VMware1!"
 validate_certs: False
@@ -18,7 +19,7 @@ compute_managers:
   password: "VMware1!"
   thumbprint: ""
 
-manager_deployment-2:
+manager_deployment_2:
   form_factor: "SMALL"
   password: "VMware1!VMware1!"
   mgmt_network_id: "dvportgroup-153"
@@ -33,7 +34,7 @@ manager_deployment-2:
   dns_servers:
   - 192.168.110.10
 
-manager_deployment-3:
+manager_deployment_3:
   form_factor: "SMALL"
   password: "VMware1!VMware1!"
   mgmt_network_id: "dvportgroup-153"
@@ -72,7 +73,7 @@ compute_uplink_profile:
     policy: LOADBALANCE_SRCID
   transport_vlan: 0
 
-edge_uplink1_profile:
+edge_uplink_profile:
 - display_name: nsx-edge-uplink1-profile
   teaming:
     active_list:
@@ -81,7 +82,7 @@ edge_uplink1_profile:
     policy: FAILOVER_ORDER
   transport_vlan: 0
 
-edge_uplink2_profile:
+edge_overlay_profile:
 - display_name: nsx-edge-uplink2-profile
   teaming:
     active_list:
@@ -100,6 +101,7 @@ tep_ip_pool:
       end: 192.168.120.20
     gateway_ip: 192.168.120.1
     cidr: "192.168.120.0/24"
+    dns_suffix: "corp.local"
 
 edge_transport_nodes-1:
 - display_name: nsxedge-1

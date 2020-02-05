@@ -9,7 +9,7 @@
   tasks:
     - name: Create Edge transport node
       nsxt_transport_nodes:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False

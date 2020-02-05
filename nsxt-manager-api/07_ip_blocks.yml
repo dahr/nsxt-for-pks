@@ -9,20 +9,20 @@
   tasks:
     - name: Create Pods IP address block
       nsxt_ip_blocks:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
         display_name: "pods-ip-block"
         state: "{{state}}"
-        cidr: "172.27.0.0/24"
+        cidr: "172.26.0.0/24"
 
     - name: Create Nodes IP address block
       nsxt_ip_blocks:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
         display_name: "nodes-ip-block"
         state: "{{state}}"
-        cidr: "172.26.0.0/24"
+        cidr: "172.25.0.0/24"

@@ -9,45 +9,45 @@
   tasks:
     - name: Create compute uplink profile
       nsxt_uplink_profiles:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
         resource_type: UplinkHostSwitchProfile
         display_name: "{{item.display_name}}"
-        mtu: 1600
+        mtu: 9000
         teaming: "{{item.teaming}}"
         transport_vlan: "{{item.transport_vlan}}"
         state: present
       with_items:
         - "{{compute_uplink_profile}}"
 
-    - name: Create Edge uplink1 profile
+    - name: Create Edge uplink profile
       nsxt_uplink_profiles:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
         resource_type: UplinkHostSwitchProfile
         display_name: "{{item.display_name}}"
-        mtu: 1600
+        mtu: 9000
         teaming: "{{item.teaming}}"
         transport_vlan: "{{item.transport_vlan}}"
         state: "{{state}}"
       with_items:
-        - "{{edge_uplink1_profile}}"
+        - "{{edge_uplink_profile}}"
 
-    - name: Create Edge uplink2 profile
+    - name: Create Edge overlay profile
       nsxt_uplink_profiles:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
         resource_type: UplinkHostSwitchProfile
         display_name: "{{item.display_name}}"
-        mtu: 1600
+        mtu: 9000
         teaming: "{{item.teaming}}"
         transport_vlan: "{{item.transport_vlan}}"
         state: "{{state}}"
       with_items:
-        - "{{edge_uplink2_profile}}"
+        - "{{edge_overlay_profile}}"

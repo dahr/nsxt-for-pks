@@ -9,7 +9,7 @@
   tasks:
     - name: Create logical switch
       nsxt_logical_switches:
-        hostname: "{{hostname}}"
+        hostname: "{{manager_cluster_vip}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False

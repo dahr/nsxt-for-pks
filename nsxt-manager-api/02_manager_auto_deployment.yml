@@ -39,7 +39,7 @@
           node_id:
           state: present
       with_items:
-        - "{{manager_deployment-2}}"
+        - "{{manager_deployment_2}}"
 
     - name: Deploy and register a 3rd cluster node VM
       nsxt_controller_manager_auto_deployment:
@@ -73,4 +73,4 @@
           node_id:
           state: "{{state}}"
       with_items:
-        - "{{manager_deployment-3}}"
+        - "{{manager_deployment_3}}"
