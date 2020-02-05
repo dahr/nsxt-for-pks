@@ -34,6 +34,6 @@
                 prefix_length: "{{item.prefix_length}}"
               dns_servers: "{{item.dns_servers}}"
           node_id:
-          state: absent
+          state: present
       with_items:
         - "{{manager_deployment}}"

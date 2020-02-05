@@ -22,7 +22,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: nsxt_manager_cluster_vip
-short_description: 'Add a manager cluster certificate'
+short_description: 'Set manager cluster VIP'
 description: "Sets the cluster virtual IP address. Note, all nodes in the management
               cluster must be in the same subnet. If not, a 409 CONFLICT status is
               returned."
@@ -92,17 +92,17 @@ def read_cluster_vip(module, manager_url, mgr_username, mgr_password, validate_c
 
     return resp
 
-def check_for_update(module, manager_url, mgr_username, mgr_password, validate_certs, cert_params):
-    existing_cert = read_cluster_vip(module, manager_url, mgr_username, mgr_password, validate_certs)
-    if existing_cert is None:
+def check_for_update(module, manager_url, mgr_username, mgr_password, validate_certs, vip_params):
+    existing_vip = read_cluster_vip(module, manager_url, mgr_username, mgr_password, validate_certs)
+    if existing_vip is None:
         return False
-    if existing_cert['certificate_id'] == cert_params['certificate_id']:
+    if existing_vip['ip_address'] == vip_params['ip_address']:
         return True
     return False
 
 def main():
   argument_spec = vmware_argument_spec()
-  argument_spec.update(certificate_id=dict(required=True, type='str', no_log=False),
+  argument_spec.update(ip_address=dict(required=True, type='str', no_log=False),
                     state=dict(required=True, choices=['present', 'absent']))
 
   module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
@@ -122,21 +122,21 @@ def main():
   if state == 'present':
     # add the certificate
     if check_for_update(module, manager_url, mgr_username, mgr_password, validate_certs, cert_params):
-        module.exit_json(changed=False, msg="Certificate with id %s already exist."% module.params['certificate_id'])
+        module.exit_json(changed=False, msg="VIP with IP %s already exist."% module.params['ip_address'])
     if module.check_mode:
        module.exit_json(changed=True, debug_out=str(request_data), id=module.params['certificate_id'])
     try:
-        (rc, resp) = request(manager_url+ '/cluster/api-virtual-ip?action=set_virtual_ip&ip_address=' + module.params['certificate_id'], headers=headers, method='POST',
+        (rc, resp) = request(manager_url+ '/cluster/api-virtual-ip?action=set_virtual_ip&ip_address=' + module.params['ip_address'], headers=headers, method='POST',
                               url_username=mgr_username, url_password=mgr_password, validate_certs=validate_certs, ignore_errors=True)
     except Exception as err:
-        module.fail_json(msg="Failed to add certificate. Request body [%s]. Error[%s]." % (request_data, to_native(err)))
+        module.fail_json(msg="Failed to set cluster VIP. Request body [%s]. Error[%s]." % (request_data, to_native(err)))
 
     time.sleep(5)
-    module.exit_json(changed=True, result=resp, message="Certificate with id %s created." % module.params['certificate_id'])
+    module.exit_json(changed=True, result=resp, message="Certificate with id %s created." % module.params['ip_address'])
 
   elif state == 'absent':
     # delete the certificate
-    id = module.params['certificate_id']
+    id = module.params['ip_address']
     if module.check_mode:
         module.exit_json(changed=True, debug_out=str(request_data), id=id)
     try:
@@ -146,7 +146,7 @@ def main():
       module.fail_json(msg="Failed to delete certificate with id %s. Error[%s]." % (id, to_native(err)))
 
     time.sleep(5)
-    module.exit_json(changed=True, object_name=id, message="Certificate with id %s deleted." % id)
+    module.exit_json(changed=True, object_name=id, message="VIP with IP %s deleted." % id)
 
 
 if __name__ == '__main__':
