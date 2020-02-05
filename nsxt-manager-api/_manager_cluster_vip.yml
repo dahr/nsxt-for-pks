@@ -1,0 +1,17 @@
+# Copyright 2020 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - answerfile.yml
+  tasks:
+    - name: Manager cluster VIP
+      nsxt_manager_cluster_vip:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        ip_address: "192.168.110.41"
+        state: "present"
