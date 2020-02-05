@@ -16,7 +16,7 @@ compute_managers:
   credential_type: UsernamePasswordLoginCredential
   username: "administrator@corp.local"
   password: "VMware1!"
-  thumbprint: "0D:B6:E1:3C:6F:9C:F6:B3:27:C9:DC:62:68:FE:3B:DF:42:59:C6:19:A4:99:51:D9:FD:39:72:3F:6E:43:BA:C6"
+  thumbprint: ""
 
 manager_deployment-2:
   form_factor: "SMALL"
