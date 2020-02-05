@@ -19,4 +19,5 @@
           resource_type: EdgeHighAvailabilityProfile
         members:
         - transport_node_name: "nsxedge-1"
-        state: present
+        - transport_node_name: "nsxedge-2"
+        state: "{{state}}"

@@ -34,7 +34,7 @@
         description: "Ansible configured Uplink Transport Zone"
         transport_type: "{{item.transport_type}}"
         host_switch_name: "{{item.host_switch_name}}"
-        state: present
+        state: "{{state}}"
       register: result
       with_items:
         - "{{transportzonevlan}}"

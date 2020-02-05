@@ -33,7 +33,7 @@
         mtu: 1600
         teaming: "{{item.teaming}}"
         transport_vlan: "{{item.transport_vlan}}"
-        state: present
+        state: "{{state}}"
       with_items:
         - "{{edge_uplink1_profile}}"
 
@@ -48,6 +48,6 @@
         mtu: 1600
         teaming: "{{item.teaming}}"
         transport_vlan: "{{item.transport_vlan}}"
-        state: "present"
+        state: "{{state}}"
       with_items:
         - "{{edge_uplink2_profile}}"

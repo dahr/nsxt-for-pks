@@ -7,7 +7,7 @@
   vars_files:
     - answerfile.yml
   tasks:
-    - name: Create transport node
+    - name: Create 1st transport node
       nsxt_transport_nodes:
         hostname: "{{hostname}}"
         username: "{{username}}"
@@ -19,6 +19,22 @@
           host_switches: "{{item.host_switches}}"
         transport_zone_endpoints: "{{item.transport_zone_endpoints}}"
         node_deployment_info: "{{item.node_deployment_info}}"
-        state: present
+        state: "{{state}}"
       with_items:
-        - "{{edge_transport_nodes}}"
+        - "{{edge_transport_nodes-1}}"
+
+    - name: Create 1st transport node
+      nsxt_transport_nodes:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        display_name: "{{item.display_name}}"
+        host_switch_spec:
+          resource_type: StandardHostSwitchSpec
+          host_switches: "{{item.host_switches}}"
+        transport_zone_endpoints: "{{item.transport_zone_endpoints}}"
+        node_deployment_info: "{{item.node_deployment_info}}"
+        state: "{{state}}"
+      with_items:
+        - "{{edge_transport_nodes-2}}"

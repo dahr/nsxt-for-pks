@@ -18,6 +18,6 @@
         admin_state: UP
         transport_zone_name: "tz_uplink"
         vlan: 0
-        state: "present"
+        state: "{{state}}"
       #with_items:
       #  - "{{logical_switches}}"

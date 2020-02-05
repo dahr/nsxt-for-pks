@@ -7,7 +7,7 @@
   vars_files:
     - answerfile.yml
   tasks:
-    - name: Deploy and register a cluster node VM
+    - name: Deploy and register a 2nd cluster node VM
       nsxt_controller_manager_auto_deployment:
           hostname: "{{hostname}}"
           username: "{{username}}"
@@ -19,7 +19,10 @@
             - MANAGER
             form_factor: "{{item.form_factor}}"
             user_settings:
+              cli_username: "admin"
               cli_password: "{{item.password}}"
+              audit_username: "audit"
+              audit_password: "{{item.password}}"
               root_password: "{{item.password}}"
             deployment_config:
               placement_type: VsphereClusterNodeVMDeploymentConfig
@@ -36,4 +39,38 @@
           node_id:
           state: present
       with_items:
-        - "{{manager_deployment}}"
+        - "{{manager_deployment-2}}"
+
+    - name: Deploy and register a 3rd cluster node VM
+      nsxt_controller_manager_auto_deployment:
+          hostname: "{{hostname}}"
+          username: "{{username}}"
+          password: "{{password}}"
+          validate_certs: False
+          deployment_requests:
+          - roles:
+            - CONTROLLER
+            - MANAGER
+            form_factor: "{{item.form_factor}}"
+            user_settings:
+              cli_username: "admin"
+              cli_password: "{{item.password}}"
+              audit_username: "audit"
+              audit_password: "{{item.password}}"
+              root_password: "{{item.password}}"
+            deployment_config:
+              placement_type: VsphereClusterNodeVMDeploymentConfig
+              vc_name: "{{management_vc}}"
+              management_network_id: "{{item.mgmt_network_id}}"
+              hostname: "{{item.hostname}}"
+              compute_id: "{{item.compute_id}}"
+              storage_id: "{{item.storage_id}}"
+              default_gateway_addresses: "{{item.default_gateways}}"
+              management_port_subnets:
+              - ip_addresses: "{{item.mgmt_ip_addresses}}"
+                prefix_length: "{{item.prefix_length}}"
+              dns_servers: "{{item.dns_servers}}"
+          node_id:
+          state: "{{state}}"
+      with_items:
+        - "{{manager_deployment-3}}"

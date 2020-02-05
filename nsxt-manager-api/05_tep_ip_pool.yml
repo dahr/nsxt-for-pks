@@ -15,6 +15,6 @@
         validate_certs: False
         display_name: "{{item.display_name}}"
         subnets: "{{item.subnets}}"
-        state: present
+        state: "{{state}}"
       with_items:
         - "{{tep_ip_pool}}"

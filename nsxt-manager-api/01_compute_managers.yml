@@ -21,6 +21,6 @@
             username: "{{item.username}}"
             password: "{{item.password}}"
             thumbprint: "{{item.thumbprint}}"
-          state: present
+          state: "{{state}}"
       with_items:
         - "{{compute_managers}}"
