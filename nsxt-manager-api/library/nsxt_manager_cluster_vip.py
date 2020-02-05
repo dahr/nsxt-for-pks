@@ -120,11 +120,11 @@ def main():
   request_data = json.dumps(cert_params)
 
   if state == 'present':
-    # add the certificate
+    # set the vip
     if check_for_update(module, manager_url, mgr_username, mgr_password, validate_certs, cert_params):
         module.exit_json(changed=False, msg="VIP with IP %s already exist."% module.params['ip_address'])
     if module.check_mode:
-       module.exit_json(changed=True, debug_out=str(request_data), id=module.params['certificate_id'])
+       module.exit_json(changed=True, debug_out=str(request_data), id=module.params['ip_address'])
     try:
         (rc, resp) = request(manager_url+ '/cluster/api-virtual-ip?action=set_virtual_ip&ip_address=' + module.params['ip_address'], headers=headers, method='POST',
                               url_username=mgr_username, url_password=mgr_password, validate_certs=validate_certs, ignore_errors=True)
@@ -132,18 +132,18 @@ def main():
         module.fail_json(msg="Failed to set cluster VIP. Request body [%s]. Error[%s]." % (request_data, to_native(err)))
 
     time.sleep(5)
-    module.exit_json(changed=True, result=resp, message="Certificate with id %s created." % module.params['ip_address'])
+    module.exit_json(changed=True, result=resp, message="Manger cluster VIP with IP %s created." % module.params['ip_address'])
 
   elif state == 'absent':
-    # delete the certificate
+    # delete the vip
     id = module.params['ip_address']
     if module.check_mode:
         module.exit_json(changed=True, debug_out=str(request_data), id=id)
     try:
-       (rc, resp) = request(manager_url+ '/cluster/api-virtual-ip?action=set_virtual_ip&ip_address=' + id, method='POST',
+       (rc, resp) = request(manager_url+ '/cluster/api-virtual-ip?action=clear_virtual_ip', method='POST',
                             url_username=mgr_username, url_password=mgr_password, validate_certs=validate_certs, ignore_errors=True)
     except Exception as err:
-      module.fail_json(msg="Failed to delete certificate with id %s. Error[%s]." % (id, to_native(err)))
+      module.fail_json(msg="Failed to delete manager cluster VIP %s. Error[%s]." % (id, to_native(err)))
 
     time.sleep(5)
     module.exit_json(changed=True, object_name=id, message="VIP with IP %s deleted." % id)
