@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2018 VMware, Inc.
+# Copyright 2020 VMware, Inc.
 # SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
@@ -21,15 +21,15 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: nsxt_licenses
-short_description: 'Add a new license key'
-description: "This will add a license key to the system.
-              The API supports adding only one license key for each license edition
-              type - Standard, Advanced or Enterprise. If a new license key is tried
-              to add for an edition for which the license key already exists,
-              then this API will return an error."
-version_added: '2.7'
-author: 'Rahul Raghuvanshi'
+module: nsxt_manager_cluster_cert
+short_description: 'Add a manager cluster certificate'
+description: "Sets the certificate used for the MP cluster.
+              Issuing this request causes the http service to restart so that the service
+              can begin using the new certificate. When the POST request succeeds, it
+              doesn't return a valid response. The request times out because of the restart.
+              This affects all nodes in the cluster."
+version_added: '2.9.3'
+author: 'Dave Ahr'
 options:
     hostname:
         description: 'Deployed NSX manager hostname.'
@@ -43,8 +43,8 @@ options:
         description: 'The password to authenticate with the NSX manager.'
         required: true
         type: str
-    license_key:
-        description: 'license key'
+    certificate_id:
+        description: 'Cluster certificate id'
         no_log: 'True'
         required: true
         type: str
@@ -59,14 +59,14 @@ options:
 '''
 
 EXAMPLES = '''
-- name: Add license
-  nsxt_licenses:
-      hostname: "10.192.167.137"
-      username: "admin"
-      password: "Admin!23Admin"
-      validate_certs: False
-      license_key: "11111-22222-33333-44444-55555"
-      state: present
+- name: Manager cluster cert update
+    nsxt_manager_cluster_cert:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        certificate_id: "7abc8483-bb20-41c9-bf1a-c55406433432"
+        state: "present"
 '''
 
 RETURN = '''# '''
@@ -137,7 +137,7 @@ def main():
     module.exit_json(changed=True, result=resp, message="Certificate with id %s created." % module.params['certificate_id'])
 
   elif state == 'absent':
-    # delete the license key
+    # delete the certificate
     id = module.params['certificate_id']
     if module.check_mode:
         module.exit_json(changed=True, debug_out=str(request_data), id=id)

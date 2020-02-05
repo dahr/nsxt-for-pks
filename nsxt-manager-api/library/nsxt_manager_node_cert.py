@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2018 VMware, Inc.
+# Copyright 2020 VMware, Inc.
 # SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
@@ -21,15 +21,16 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: nsxt_licenses
-short_description: 'Add a new license key'
-description: "This will add a license key to the system.
-              The API supports adding only one license key for each license edition
-              type - Standard, Advanced or Enterprise. If a new license key is tried
-              to add for an edition for which the license key already exists,
-              then this API will return an error."
-version_added: '2.7'
-author: 'Rahul Raghuvanshi'
+module: nsxt_manager_node_cert
+short_description: 'Set a manager node  certificate'
+description: "Applies a security certificate to the http service. In the POST request,
+              the CERTIFICATE_ID references a certificate created with the
+              /api/v1/trust-management APIs. Issuing this request causes the http service
+              to restart so that the service can begin using the new certificate. When the
+              POST request succeeds, it doesn't return a valid response. The request times
+              out because of the restart."
+version_added: '2.9.3'
+author: 'Dave Ahr'
 options:
     hostname:
         description: 'Deployed NSX manager hostname.'
@@ -43,8 +44,8 @@ options:
         description: 'The password to authenticate with the NSX manager.'
         required: true
         type: str
-    license_key:
-        description: 'license key'
+    certificate_id:
+        description: 'Imported certificate id'
         no_log: 'True'
         required: true
         type: str
@@ -59,14 +60,15 @@ options:
 '''
 
 EXAMPLES = '''
-- name: Add license
-  nsxt_licenses:
-      hostname: "10.192.167.137"
-      username: "admin"
-      password: "Admin!23Admin"
-      validate_certs: False
-      license_key: "11111-22222-33333-44444-55555"
-      state: present
+    - name: Manager node cert update
+        nsxt_manager_node_cert:
+        hostname: "{{hostname}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        validate_certs: False
+        certificate_id: "7abc8483-bb20-41c9-bf1a-c55406433432"
+        state: "present"
+
 '''
 
 RETURN = '''# '''
@@ -104,7 +106,7 @@ def check_for_update(module, manager_url, mgr_username, mgr_password, validate_c
 
 def main():
   argument_spec = vmware_argument_spec()
-  argument_spec.update(certificate_id=dict(required=True, type='str', no_log=False),
+  argument_spec.update(certificate_id=dict(required=True, type='str', no_log=True),
                     state=dict(required=True, choices=['present', 'absent']))
 
   module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
@@ -137,7 +139,7 @@ def main():
     module.exit_json(changed=True, result=resp, message="Certificate with id %s created." % module.params['certificate_id'])
 
   elif state == 'absent':
-    # delete the license key
+    # delete the certificate
     id = module.params['certificate_id']
     if module.check_mode:
         module.exit_json(changed=True, debug_out=str(request_data), id=id)
