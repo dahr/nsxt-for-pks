@@ -74,7 +74,7 @@ compute_uplink_profile:
   transport_vlan: 0
 
 edge_uplink_profile:
-- display_name: nsx-edge-uplink1-profile
+- display_name: nsx-edge-uplink-profile
   teaming:
     active_list:
     - uplink_name: "uplink-1"
@@ -83,7 +83,7 @@ edge_uplink_profile:
   transport_vlan: 0
 
 edge_overlay_profile:
-- display_name: nsx-edge-uplink2-profile
+- display_name: nsx-edge-overlay-profile
   teaming:
     active_list:
     - uplink_name: "uplink-1"
@@ -103,7 +103,7 @@ tep_ip_pool:
     cidr: "192.168.120.0/24"
     dns_suffix: "corp.local"
 
-edge_transport_nodes-1:
+edge_transport_nodes_1:
 - display_name: nsxedge-1
   host_switches:
   - host_switch_profiles:
@@ -127,7 +127,7 @@ edge_transport_nodes-1:
   - transport_zone_name: "tz_uplink"
   - transport_zone_name: "tz_overlay"
 
-edge_transport_nodes-2:
+edge_transport_nodes_2:
 - display_name: nsxedge-1
   host_switches:
   - host_switch_profiles:
