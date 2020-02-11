@@ -126,6 +126,45 @@ edge_transport_nodes_1:
   transport_zone_endpoints:
   - transport_zone_name: "tz_uplink"
   - transport_zone_name: "tz_overlay"
+  node_deployment_info:
+  - deployment_type: "VIRTUAL_MACHINE"
+    deployment_config:
+    - form_factor: "SMALL"
+      node_user_settings:
+      - audit_password: "VMware1!VMware1!"
+        audit_username: "audit"
+        cli_password: "VMware1!VMware1!"
+        cli_username: "admin"
+        root_password: "VMware1!VMware1!"
+      vm_deployment_config: 
+      - compute_id: ":domain-c141"
+        data_network_ids: 
+        - "dvportgroup-151"
+        - "dvportgroup-152"
+        default_gateway_addresses:
+        - "192.168.110.1"
+        host_id:
+        management_network_id: "dvportgroup-153"
+        management_port_subnets:
+        - ip_addresses:
+          - 192.168.110.45
+          prefix_length: 24
+        placement_type: VsphereDeploymentConfig
+        storage_id: "datastore-1"
+        vc_name: "vcsa-01a.corp.local"
+    fqdn: "edgenode-1.corp.local"
+    node_settings:
+    - allow_ssh_root_login: "True"
+      dns_servers:
+      - 192.168.110.10
+      enable_ssh: "True"
+      hostname: "edgenode-1"
+      ntp_servers:
+      - 192.168.110.10
+      search_domains:
+      - "corp.local"
+
+
 
 edge_transport_nodes_2:
 - display_name: nsxedge-1
