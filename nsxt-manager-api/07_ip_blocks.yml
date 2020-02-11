@@ -15,7 +15,7 @@
         validate_certs: False
         display_name: "pods-ip-block"
         state: "{{state}}"
-        cidr: "172.26.0.0/24"
+        cidr: "172.12.0.0/24"
 
     - name: Create Nodes IP address block
       nsxt_ip_blocks:
@@ -25,4 +25,4 @@
         validate_certs: False
         display_name: "nodes-ip-block"
         state: "{{state}}"
-        cidr: "172.25.0.0/24"
+        cidr: "172.13.0.0/24"
