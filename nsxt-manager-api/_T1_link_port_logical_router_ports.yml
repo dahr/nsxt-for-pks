@@ -7,14 +7,13 @@
   vars_files:
     - answerfile.yml
   tasks:
-    - name: Create logical router
-      nsxt_logical_routers:
+    - name: Create logical router port
+      nsxt_logical_router_ports:
         hostname: "{{hostname}}"
         username: "{{username}}"
         password: "{{password}}"
         validate_certs: False
-        display_name: "tier-1"
-        edge_cluster_name: edge-cluster-1
-        router_type: TIER1
-        high_availability_mode: ACTIVE_STANDBY
+        display_name: "test-rp"
+        resource_type: "LogicalRouterLinkPortOnTIER1"
+        logical_router_name: "tier-1"
         state: "present"

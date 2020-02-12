@@ -24,18 +24,18 @@
       with_items:
         - "{{edge_transport_nodes_1}}"
 
-    - name: Create 1st transport node
-      nsxt_transport_nodes:
-        hostname: "{{manager_cluster_vip}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: False
-        display_name: "{{item.display_name}}"
-        host_switch_spec:
-          resource_type: StandardHostSwitchSpec
-          host_switches: "{{item.host_switches}}"
-        transport_zone_endpoints: "{{item.transport_zone_endpoints}}"
-        node_deployment_info: "{{item.node_deployment_info}}"
-        state: "{{state}}"
-      with_items:
-        - "{{edge_transport_nodes_2}}"
+    # - name: Create 1st transport node
+    #   nsxt_transport_nodes:
+    #     hostname: "{{manager_cluster_vip}}"
+    #     username: "{{username}}"
+    #     password: "{{password}}"
+    #     validate_certs: False
+    #     display_name: "{{item.display_name}}"
+    #     host_switch_spec:
+    #       resource_type: StandardHostSwitchSpec
+    #       host_switches: "{{item.host_switches}}"
+    #     transport_zone_endpoints: "{{item.transport_zone_endpoints}}"
+    #     node_deployment_info: "{{item.node_deployment_info}}"
+    #     state: "{{state}}"
+    #   with_items:
+    #     - "{{edge_transport_nodes_2}}"

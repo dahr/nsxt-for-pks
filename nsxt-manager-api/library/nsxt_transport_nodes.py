@@ -492,7 +492,7 @@ def get_tn_from_display_name(module, manager_url, mgr_username, mgr_password, va
 
 def wait_till_create(node_id, module, manager_url, mgr_username, mgr_password, validate_certs):
     try:
-      count = 0;
+      count = 0
       while True:
           (rc, resp) = request(manager_url+ '/transport-nodes/%s/state'% node_id, headers=dict(Accept='application/json'),
                         url_username=mgr_username, url_password=mgr_password, validate_certs=validate_certs, ignore_errors=True)

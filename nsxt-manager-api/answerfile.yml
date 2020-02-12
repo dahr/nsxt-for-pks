@@ -8,7 +8,8 @@ password: "VMware1!VMware1!"
 validate_certs: False
 management_vc: "vcsa-01a"
 compute_vc: "vcsa-01a"
-state: absent
+cluster_vip: "192.168.110.41"
+state: present
 
 compute_managers:
 - display_name: "vcsa-01a"
@@ -48,9 +49,6 @@ manager_deployment_3:
   prefix_length: "24"
   dns_servers:
   - 192.168.110.10
-
-cluster_vip:
-  ip_address: "192.168.110.41"
 
 transportzoneoverlay:
 - display_name: "tz_overlay"
@@ -109,14 +107,14 @@ edge_transport_nodes_1:
   - host_switch_profiles:
     - name: nsx-edge-single-nic-uplink-profile
       type: UplinkHostSwitchProfile
-    host_switch_name: tz_uplink
+    host_switch_name: "tz_uplink"
     pnics:
     - device_name: "fp-eth0"
       uplink_name: "uplink-1"
   - host_switch_profiles:
     - name: nsx-edge-single-nic-uplink-profile
       type: UplinkHostSwitchProfile
-    host_switch_name: tz_overlay
+    host_switch_name: "tz_overlay"
     pnics:
     - device_name: "fp-eth1"
       uplink_name: "uplink-1"
@@ -127,20 +125,22 @@ edge_transport_nodes_1:
   - transport_zone_name: "tz_uplink"
   - transport_zone_name: "tz_overlay"
   node_deployment_info:
-  - deployment_type: "VIRTUAL_MACHINE"
+    deployment_type: "VIRTUAL_MACHINE"
+    fqdn: "edgenode-1.corp.local"
+    resource_type: "EdgeNode"
     deployment_config:
-    - form_factor: "SMALL"
+      form_factor: "SMALL"
       node_user_settings:
-      - audit_password: "VMware1!VMware1!"
+        audit_password: "VMware1!VMware1!"
         audit_username: "audit"
         cli_password: "VMware1!VMware1!"
         cli_username: "admin"
         root_password: "VMware1!VMware1!"
       vm_deployment_config: 
-      - compute_id: ":domain-c141"
+        compute_id: "domain-c141"
         data_network_ids: 
-        - "dvportgroup-151"
         - "dvportgroup-152"
+        - "dvportgroup-151"
         default_gateway_addresses:
         - "192.168.110.1"
         host_id:
@@ -150,11 +150,10 @@ edge_transport_nodes_1:
           - 192.168.110.45
           prefix_length: 24
         placement_type: VsphereDeploymentConfig
-        storage_id: "datastore-1"
-        vc_name: "vcsa-01a.corp.local"
-    fqdn: "edgenode-1.corp.local"
+        storage_id: "datastore-155"
+        vc_name: "vcsa-01a"
     node_settings:
-    - allow_ssh_root_login: "True"
+      allow_ssh_root_login: "True"
       dns_servers:
       - 192.168.110.10
       enable_ssh: "True"
